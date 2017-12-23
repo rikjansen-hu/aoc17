@@ -13,11 +13,12 @@ def turn_right(x):        return np.array([ x[1], -x[0]])
 def symbol(grid, x):      return grid[tuple(x)]
 def is_inside(grid, x):   return symbol(grid, x) != SPACE_SYMBOL
 def is_junction(grid, x): return symbol(grid, x) == JUNCTION_SYMBOL
+def get_start_pos(grid):  return np.array([START_ROW, np.argmax(grid[START_ROW] == START_SYMBOL)])
 
 
 def path():
     grid = np.asarray(list(map(list, open(INPUT_FILE_NAME))))
-    x = np.array([START_ROW, np.argmax(grid[START_ROW] == START_SYMBOL)])
+    x = get_start_pos(grid)
     v = START_DIR
 
     while is_inside(grid, x):
