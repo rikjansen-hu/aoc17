@@ -10,7 +10,7 @@ NR_BURSTS       = 10000
 def file_to_2d_array(filename): return np.asarray(list(map(list, open(filename))))
 def turn_left(x):     return np.array([-x[1],  x[0]])
 def turn_right(x):    return np.array([ x[1], -x[0]])
-def is_infection(a):   return a == INFECTED_SYMBOL
+def is_infection(a):  return a == INFECTED_SYMBOL
 def get_center(grid): return np.asarray(grid.shape) // 2
 
 def virus_trace():
@@ -28,7 +28,7 @@ def virus_trace():
         x += v
 
 
-infect_actions = filter(is_infection, first(virus_trace(), NR_BURSTS))
-nr_infects = sum(1 for _ in infect_actions)
+infections = filter(is_infection, first(virus_trace(), NR_BURSTS))
+nr_infects = sum(1 for _ in infections)
 
 print(nr_infects)
