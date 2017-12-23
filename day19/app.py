@@ -1,18 +1,30 @@
 import numpy as np
 
-def left(x):       return np.array([-x[1], x[0]])
-def right(x):      return np.array([x[1], -x[0]])
-def isSpace(x):    return x == ' '
-def isJunction(x): return x == '+'
+INPUT_FILE_NAME = 'input'
+START_ROW       = 0
+START_DIR       = np.array([1, 0])
+START_SYMBOL    = '|'
+JUNCTION_SYMBOL = '+'
+SPACE_SYMBOL    = ' '
 
-grid = np.asarray(list(map(list, open("input"))))
-cur = '|'
-x = np.array([0, np.argmax(grid[0] == cur)])
-v = np.array([1, 0])
 
-while not isSpace(cur):
-    x += v
-    cur = grid[tuple(x)]
-    if cur.isalpha(): print(cur, end='')
-    if isJunction(cur):
-        v = left(v) if not isSpace(grid[tuple(x + left(v))]) else right(v)
+def turn_left(x):         return np.array([-x[1],  x[0]])
+def turn_right(x):        return np.array([ x[1], -x[0]])
+def symbol(grid, x):      return grid[tuple(x)]
+def is_inside(grid, x):   return symbol(grid, x) != SPACE_SYMBOL
+def is_junction(grid, x): return symbol(grid, x) == JUNCTION_SYMBOL
+
+
+def path():
+    grid = np.asarray(list(map(list, open(INPUT_FILE_NAME))))
+    x = np.array([START_ROW, np.argmax(grid[START_ROW] == START_SYMBOL)])
+    v = START_DIR
+
+    while is_inside(grid, x):
+        x += v
+        yield symbol(grid, x)
+        if is_junction(grid, x):
+            v = turn_left(v) if is_inside(grid, x + turn_left(v)) else turn_right(v)
+
+
+[print(symbol, end='') for symbol in path() if symbol.isalpha()]
